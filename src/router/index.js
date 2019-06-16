@@ -7,7 +7,7 @@ import DashboardWrapper from '@/components/Admin/DashboardWrapper'
 import DashView from '@/components/DashView';
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
-import LandingPage from '@/components/Rizal/LandingPage';
+import LandingPage from '@/components/FrontEnd/LandingPage';
 
 // Admin Component
 import DashboardAdmin from '@/components/Admin/DashboardAdmin'

@@ -36,6 +36,7 @@
                 <tr>
                   <th>Medicine</th>
                   <th>Form</th>
+                  <th>Price</th>
                   <th>Qty</th>
                   <th>Action</th>
                 </tr>
@@ -44,6 +45,7 @@
                 <tr v-for="(detail, i) in details" :key="i">
                   <th>{{ detail.medicine ? detail.medicine.name : '-' }}</th>
                   <th>{{ detail.medicine ? detail.medicine.form : '-' }}</th>
+                  <th>{{ detail.medicine ? detail.medicine.price : 0 | currency }}</th>
                   <th>{{ detail.qty }}</th>
                   <th>
                     <b-button @click="removeFromDetail(i)" variant="danger" size="sm">

@@ -1,52 +1,61 @@
 <template>
   <div class="wrapper">
-    <div class="col-md-6 mx-auto">
-      <div class="wrap">
-        <form v-on:submit.prevent="login">
-          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input
-              type="email"
-              v-model="email"
-              class="form-control"
-              name="email"
-              placeholder="Enter Email"
-              autocomplete="off"
-            >
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <div class="input-group mb-3">
-              <input
-                :type="show ? 'text' : 'password'"
-                class="form-control"
-                v-model="password"
-                placeholder="Password"
-                aria-label="Password"
-                aria-describedby="button-addon2"
-                autocomplete="off"
-              >
-              <div class="input-group-append">
-                <button
-                  @click="showPassword"
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  id="button-addon2"
-                >
-                  <i :class="show ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
-                </button>
-              </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card-group">
+          <div class="card p-4">
+            <div class="card-body">
+              <form v-on:submit.prevent="login">
+                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input
+                    type="email"
+                    v-model="email"
+                    class="form-control"
+                    name="email"
+                    placeholder="Enter Email"
+                    autocomplete="off"
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <div class="input-group mb-3">
+                    <input
+                      :type="show ? 'text' : 'password'"
+                      class="form-control"
+                      v-model="password"
+                      placeholder="Password"
+                      aria-label="Password"
+                      aria-describedby="button-addon2"
+                      autocomplete="off"
+                    >
+                    <div class="input-group-append">
+                      <button
+                        @click="showPassword"
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        id="button-addon2"
+                      >
+                        <i :class="show ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary btn-block" type="submit">Login</button>
+                  <p class="mt-2">
+                    Belum punya akun ?
+                    <router-link to="/register">Daftar disini &#128522;.</router-link>
+                  </p>
+                </div>
+              </form>
             </div>
           </div>
-          <div class="form-group">
-            <button class="btn btn-primary btn-block" type="submit">Login</button>
-            <p class="mt-2">
-              Belum punya akun ?
-              <router-link to="/register">Daftar disini &#128522;.</router-link>
-            </p>
-          </div>
-        </form>
+          <!-- <div class="card text-white bg-argya py-5 d-md d-md-down-none" style="width:44%">
+            <div class="card-body"></div>
+          </div>-->
+        </div>
       </div>
     </div>
   </div>
@@ -112,11 +121,9 @@ export default {
 
 <style>
 .wrapper {
-  background-image: url("~@/assets/images/sunat.jpg");
-  background-size: cover;
+  background-image: url("~@/assets/images/weather.png");
   font-family: Arial, Helvetica, sans-serif;
-  padding-top: 300px;
-  padding-bottom: 100px;
+  padding: 150px;
 }
 
 .wrap {

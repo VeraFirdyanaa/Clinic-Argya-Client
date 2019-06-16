@@ -5,6 +5,7 @@
       <hr>
       <div class="row">
         <div class="col-md-8 offset-md-2">
+          <!-- http://localhost:8080/#/dashboard/procedures/(id)ARG6-0008/(_mongoID)5d060ecabf5a8b10f03403b2 -->
           <medical-record
             :appointment-code="$route.params.id"
             :appointment-id="$route.params._mongoID"
@@ -12,11 +13,6 @@
           ></medical-record>
         </div>
       </div>
-      <!-- <div class="row" v-if="needMedicine">
-        <div class="col-md-12">
-          <recipe :appointment-code="$route.params.id" :appointment-id="$route.params._mongoID"></recipe>
-        </div>
-      </div>-->
     </div>
   </div>
 </template>

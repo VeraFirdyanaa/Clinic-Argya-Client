@@ -5,6 +5,20 @@
       <b-button v-b-modal.modal-form variant="outline-primary" class="mb-2">
         <i class="fa fa-plus"></i>&nbsp;Tambah Doctors
       </b-button>
+      <div class="row">
+        <div class="col-md-5 offset-md-7">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Find Doctor ..."
+              aria-describedby="button-addon2"
+              v-model="search"
+              autocomplete="false"
+            >
+          </div>
+        </div>
+      </div>
       <table class="table table-striped table-hovered">
         <thead>
           <tr>
@@ -26,7 +40,7 @@
             <td>{{ doctor.gender }}</td>
             <td>{{ doctor.specialist }}</td>
             <td>{{ doctor.userId.email }}</td>
-            <td>{{ doctor.rates }}</td>
+            <td>{{ doctor.rates | currency }}</td>
             <td>
               <b-button-group>
                 <b-button size="sm" variant="info" @click="onEdit(doctor)">
@@ -40,6 +54,12 @@
           </tr>
         </tbody>
       </table>
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="totalRows"
+        @change="getDoctors($event)"
+        :per-page="perPage"
+      ></b-pagination>
     </div>
     <b-modal id="modal-form" title="Form Doctor" @ok="ok()">
       <div class="row">
@@ -111,6 +131,7 @@
               <input
                 type="email"
                 v-model="doctor.email"
+                name="email"
                 class="form-control"
                 v-validate="{ required: true, email: true }"
               >
@@ -122,7 +143,35 @@
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input type="password" v-model="doctor.password" class="form-control">
+              <div class="input-group mb-3">
+                <input
+                  :type="show ? 'text' : 'password'"
+                  class="form-control"
+                  v-model="password"
+                  name="password"
+                  placeholder="Password"
+                  aria-label="Enter a Password"
+                  aria-describedby="button-addon2"
+                  autocomplete="off"
+                >
+                <div class="input-group-append">
+                  <button
+                    @click="showPassword"
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="button-addon2"
+                  >
+                    <i :class="show ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+                  </button>
+                </div>
+              </div>
+              <ul>
+                <li
+                  class="text-danger mt-1"
+                  v-for="(error, index) in Object.keys(passwordErrors)"
+                  :key="index"
+                >{{ passwordErrors[error].isError ? passwordErrors[error].errMessage : null }}</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -132,12 +181,18 @@
 </template>
 
 <script>
+import _ from "lodash";
+
 export default {
   data() {
     return {
       editing: false,
       doctors: [],
       _id: null,
+      currentPage: 1,
+      perPage: 10,
+      totalRows: 0,
+      search: "",
       doctor: {
         name: null,
         address: null,
@@ -147,27 +202,74 @@ export default {
         specialist: null,
         email: null,
         password: null
+      },
+      password: "",
+      show: false,
+      passwordErrors: {
+        ALPHA_NUMERIC_DASH: {
+          errMessage:
+            "Password must contain an 1 Uppercase, 1 Lowercase and must contain alphabet , numeric and symbols e.g @!_#*$%&",
+          isError: false
+        },
+        MAX_8: {
+          errMessage: "Minimum length of password is 8",
+          isError: false
+        }
       }
     };
   },
+  watch: {
+    password: _.debounce(function(val) {
+      if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#\$%\^&\*])/.test(val)) {
+        console.log("[IS-ERROR] alpha numeric is false");
+        this.passwordErrors["ALPHA_NUMERIC_DASH"].isError = false;
+      } else {
+        console.log("[IS-ERROR] alpha numeric is true");
+        this.passwordErrors["ALPHA_NUMERIC_DASH"].isError = true;
+      }
+
+      if (/^(?=.{8,})/.test(val)) {
+        console.log("[IS-ERROR] max_8 is false");
+        this.passwordErrors["MAX_8"].isError = false;
+      } else {
+        console.log("[IS-ERROR] max_8 is true");
+        this.passwordErrors["MAX_8"].isError = true;
+      }
+    }, 500),
+    search: _.debounce(function(val) {
+      this.getDoctors(1);
+    }, 500)
+  },
+  created() {
+    this.search = "";
+  },
   mounted() {
-    this.getDoctors();
+    this.getDoctors(this.currentPage);
     this.$root.$on("bv::modal::hide", (bvEvent, modalId) => {
       this.onReset();
     });
   },
   methods: {
-    getDoctors() {
-      fetch("http://localhost:5000/api/doctors")
+    getDoctors(page) {
+      fetch(
+        "http://localhost:5000/api/doctors?page=" +
+          page +
+          "&limit=" +
+          this.perPage +
+          "&name=" +
+          this.search
+      )
         .then(res => res.json())
         .then(res => {
           this.doctors = res.doctors;
+          this.totalRows = res.total;
         })
         .catch(err => {
           console.log("an error occured", err.response);
         });
     },
     ok() {
+      this.doctor.password = this.password;
       if (this.editing) {
         fetch("http://localhost:5000/api/doctors/" + this._id, {
           method: "PUT",
@@ -263,10 +365,17 @@ export default {
             });
         }
       });
+    },
+    showPassword() {
+      this.show = !this.show;
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
+ul,
+li {
+  list-style: none;
+}
 </style>

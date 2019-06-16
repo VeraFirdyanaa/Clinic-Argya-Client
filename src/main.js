@@ -7,6 +7,7 @@ import VeeValidate from 'vee-validate';
 import VueSweetalert2 from 'vue-sweetalert2';
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import VueHtmlToPaper from 'vue-html-to-paper';
+import VueCurrencyFilter from 'vue-currency-filter';
 
 
 import {
@@ -49,6 +50,15 @@ Vue.use(VeeValidate);
 Vue.use(VueSweetalert2);
 Vue.use(Print);
 Vue.use(VueHtmlToPaper, options);
+Vue.use(require('vue-moment'));
+Vue.use(VueCurrencyFilter, {
+  symbol: 'Rp',
+  thousandsOperator: '.',
+  fractionCount: 2,
+  fractionOperator: ',',
+  symbolPosition: 'front',
+  symbolSpacing: true
+})
 
 /* eslint-disable no-new */
 new Vue({

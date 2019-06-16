@@ -5,6 +5,20 @@
       <b-button v-b-modal.modal-form variant="outline-primary" class="mb-2">
         <i class="fa fa-plus"></i>&nbsp;Tambah Medicines
       </b-button>
+      <div class="row">
+        <div class="col-md-5 offset-md-7">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Find Medicine ..."
+              aria-describedby="button-addon2"
+              v-model="search"
+              autocomplete="false"
+            >
+          </div>
+        </div>
+      </div>
       <table class="table table-striped table-hovered">
         <thead>
           <tr>
@@ -20,9 +34,9 @@
           <tr v-for="(medicine) in medicines" :key="medicine._id">
             <td>{{ medicine.name }}</td>
             <td>{{ medicine.form }}</td>
-            <td>{{ medicine.expiredDate }}</td>
-            <td>{{ medicine.createdDate }}</td>
-            <td>{{ medicine.price }}</td>
+            <td>{{ medicine.expiredDate | moment("dddd, MMMM do YYYY") }}</td>
+            <td>{{ medicine.createdDate | moment("dddd, MMMM do YYYY") }}</td>
+            <td>{{ medicine.price | currency }}</td>
             <td>
               <b-button-group>
                 <b-button size="sm" variant="info" @click="onEdit(medicine)">
@@ -36,6 +50,12 @@
           </tr>
         </tbody>
       </table>
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="totalRows"
+        @change="getMedicines($event)"
+        :per-page="perPage"
+      ></b-pagination>
     </div>
     <b-modal id="modal-form" title="Form Medicine" @ok="ok()">
       <div class="row">
@@ -50,6 +70,7 @@
               <option value="tablet">Tablet</option>
               <option value="kapsul">Kapsul</option>
               <option value="sirup">Sirup</option>
+              <option value="salep">Salep</option>
             </select>
           </div>
           <div class="form-group">
@@ -75,6 +96,7 @@
 
 <script>
 import Datepicker from "vuejs-datepicker";
+import _ from "lodash";
 
 export default {
   components: {
@@ -85,6 +107,10 @@ export default {
       editing: false,
       medicines: [],
       _id: null,
+      currentPage: 1,
+      perPage: 10,
+      totalRows: 0,
+      search: "",
       medicine: {
         name: null,
         price: 0,
@@ -94,17 +120,20 @@ export default {
     };
   },
   mounted() {
-    this.getMedicines();
+    this.getMedicines(this.currentPage);
     this.$root.$on("bv::modal::hide", (bvEvent, modalId) => {
       this.onReset();
     });
   },
   methods: {
-    getMedicines() {
-      fetch("http://localhost:5000/api/medicines")
+    getMedicines(page) {
+      fetch(
+        `http://localhost:5000/api/medicines?page=${page}&limit=${this.perPage}&name=${this.search}`
+      )
         .then(res => res.json())
         .then(res => {
           this.medicines = res.medicines;
+          this.totalRows = res.total;
         })
         .catch(err => {
           console.log("an error occured", err.response);
@@ -203,6 +232,11 @@ export default {
         }
       });
     }
+  },
+  watch: {
+    search: _.debounce(function(val) {
+      this.getMedicines(1);
+    }, 500)
   }
 };
 </script>

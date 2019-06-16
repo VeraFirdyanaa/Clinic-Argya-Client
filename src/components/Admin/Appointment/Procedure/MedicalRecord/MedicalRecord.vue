@@ -180,11 +180,6 @@ export default {
         }
       });
     }
-  },
-  watch: {
-    // needRecipe: function(newVal) {
-    //   this.$emit("changeRecipeBox", newVal);
-    // }
   }
 };
 </script>

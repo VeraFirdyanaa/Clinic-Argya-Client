@@ -5,6 +5,20 @@
       <!-- <b-button v-b-modal.modal-form variant="outline-primary" class="mb-2">
         <i class="fa fa-plus"></i>&nbsp;Tambah Appointments
       </b-button>-->
+      <div class="row">
+        <div class="col-md-5 offset-md-7">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Find Appointment Code ..."
+              aria-describedby="button-addon2"
+              v-model="search"
+              autocomplete="false"
+            >
+          </div>
+        </div>
+      </div>
       <table class="table table-striped table-hovered">
         <thead>
           <tr>
@@ -20,7 +34,7 @@
         <tbody>
           <tr v-for="(appointment) in appointments" :key="appointment._id">
             <td>{{ appointment.code }}</td>
-            <td>{{ appointment.timeCome }}</td>
+            <td>{{ appointment.timeCome | moment("dddd, MMMM do YYYY") }}</td>
             <td>{{ appointment.patient ? appointment.patient.name : '-' }}</td>
             <td>
               <span v-if="!appointment.hasCome">
@@ -39,7 +53,7 @@
               </span>
               <span v-if="!appointment.medicalRecord">Belum Ada!</span>
             </td>
-            <td>{{ appointment.timeQueue }}</td>
+            <td>{{ appointment.timeQueue | moment("dddd, MMMM do YYYY") }}</td>
             <td>
               <b-button-group>
                 <b-button
@@ -70,6 +84,7 @@
 
 <script>
 import Datepicker from "vuejs-datepicker";
+import _ from "lodash";
 
 export default {
   components: {
@@ -78,11 +93,12 @@ export default {
   data() {
     return {
       currentPage: 1,
-      perPage: 3,
+      perPage: 10,
       totalRows: 0,
       editing: false,
       appointments: [],
       _id: null,
+      search: "",
       appointment: {
         name: null,
         address: null,
@@ -96,6 +112,11 @@ export default {
       }
     };
   },
+  watch: {
+    search: _.debounce(function(val) {
+      this.getAppointments(1);
+    }, 500)
+  },
   mounted() {
     this.getAppointments(this.currentPage);
   },
@@ -106,7 +127,9 @@ export default {
         "http://localhost:5000/api/queues?page=" +
           page +
           "&limit=" +
-          this.perPage
+          this.perPage +
+          "&code=" +
+          this.search
       )
         .then(res => res.json())
         .then(res => {

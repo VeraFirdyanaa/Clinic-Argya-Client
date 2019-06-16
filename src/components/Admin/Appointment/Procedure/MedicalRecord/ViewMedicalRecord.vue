@@ -60,7 +60,7 @@
               <h5 class="card-title">Recipe</h5>
               <h6
                 class="card-subtitle text-muted mb-2"
-              >Total: Rp. {{ medicalRecord.recipe ? medicalRecord.recipe.total : 0 }}</h6>
+              >Total: {{ medicalRecord.recipe ? medicalRecord.recipe.total : 0 | currency }}</h6>
               <div class="card-text">
                 <p class="text-muted text-center" v-if="!medicalRecord.recipe">No Recipe Found!</p>
                 <table class="table table-striped table-hovered" v-if="medicalRecord.recipe">
@@ -76,7 +76,7 @@
                     <tr v-for="(detail, i) in medicalRecord.recipe.details" :key="i">
                       <td>{{ detail.medicine.name }}</td>
                       <td>{{ detail.medicine.form }}</td>
-                      <td>Rp. {{ detail.medicine.price }}</td>
+                      <td>{{ detail.medicine.price | currency }}</td>
                       <td>{{ detail.qty }}</td>
                     </tr>
                   </tbody>
@@ -85,8 +85,8 @@
                 <h5>Payment</h5>
                 <p
                   v-if="(medicalRecord.payment ? medicalRecord.payment.total : 0) - (medicalRecord.recipe ? medicalRecord.recipe.total : 0) !== 0"
-                >+ Consultation Fee (Rp. {{ medicalRecord.doctor ? medicalRecord.doctor.rates : 0 }})</p>
-                <p>Grand Total: Rp. {{ medicalRecord.payment ? medicalRecord.payment.total : 0 }}</p>
+                >+ Consultation Fee ({{ medicalRecord.doctor ? medicalRecord.doctor.rates : 0 | currency }})</p>
+                <p>Grand Total: {{ medicalRecord.payment ? medicalRecord.payment.total : 0 | currency }}</p>
               </div>
             </div>
           </div>

@@ -1,20 +1,61 @@
 <template>
   <div>
-    <!-- jumbotron -->
-    <b-jumbotron class="mb-0 mb-lg-5 mb-md-3">
-      <template slot="header">Welcome</template>
-
-      <template slot="lead">Welcome to Klinik Argya Web Application.</template>
-
-      <hr class="my-4">
-
-      <p>
-        Klik Info untuk informasi tentang web app ini,
-        atau Log-In untuk langsung menggunakan service dari web app ini.
-      </p>
-    </b-jumbotron>
     <!-- layout and grid -->
     <b-container fluid>
+      <div class="row kolom">
+        <div class="col-md-12">
+          <b-jumbotron>
+            <template slot="header">Klinik Argya</template>
+
+            <template slot="lead">
+              <h2>Real Care Health Clinic</h2>
+            </template>
+          </b-jumbotron>
+        </div>
+      </div>
+      <b-row>
+        <b-col cols="12" md="12" lg="12" class="mb-5 mt-5">
+          <div class="row">
+            <div class="col-md-10 offset-md-1">
+              <div class="card-group">
+                <div class="card p-4 kolom">
+                  <div class="card-body">
+                    <h2 class="text-center text-white">Opening Hours</h2>
+                    <div class="my-mt">
+                      <div class="row mt-5 pl-2 pr-2">
+                        <div class="col-md-6 text-white my-hr">Monday-Friday</div>
+                        <div class="col-md-6 text-white my-hr">5.00 pm - 9.00 pm</div>
+                      </div>
+                      <div class="row mt-5 pl-2 pr-2">
+                        <div class="col-md-6 text-white my-hr">Saturday</div>
+                        <div class="col-md-6 text-white my-hr">9.00 am - 9.00 pm</div>
+                      </div>
+                      <div class="row mt-5 pl-2 pr-2">
+                        <div class="col-md-6 text-white my-hr">Sunday</div>
+                        <div class="col-md-6 text-white my-hr">9.00 am - 5.00 pm</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card p-2">
+                  <div class="card-body">
+                    <h2 class="text-center text-appointment">Appointment</h2>
+                    <VueCtkDateTimePicker
+                      v-model="timeCome"
+                      inline
+                      color="#62a93f"
+                      button-color="#62a93f"
+                    ></VueCtkDateTimePicker>
+                    <div class="text-center">
+                      <b-button variant="outline-success" size="lg" @click="onBooking">Book Now!</b-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </b-col>
+      </b-row>
       <b-row>
         <!-- carousel -->
         <b-col cols="12" md="8" lg="8" class="kolom">
@@ -29,6 +70,9 @@
                 </div>
                 <div class="carousel-item">
                   <img src="@/assets/images/klinik-argya-03.png" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                  <img src="@/assets/images/sunat.jpg" class="d-block w-100" alt="...">
                 </div>
               </div>
               <a
@@ -50,13 +94,6 @@
                 <span class="sr-only">Next</span>
               </a>
             </div>
-            <!-- <b-carousel id="carousel-1" :interval="4000" controls indicators>
-              <b-carousel-slide img-src="@/assets/images/klinik-argya-01.png" img-alt="gambar-01"></b-carousel-slide>
-
-              <b-carousel-slide img-src="@/assets/images/klinik-argya-02.png" img-alt="gambar-02"></b-carousel-slide>
-
-              <b-carousel-slide img-src="@/assets/images/klinik-argya-03.png" img-alt="gambar-03"></b-carousel-slide>
-            </b-carousel>-->
           </div>
         </b-col>
         <!-- alamat, sosmed -->
@@ -71,9 +108,7 @@
                   lg="2"
                   class="d-flex flex-column align-self-center text-center"
                 >
-                  <b-link href="#foo">
-                    <font-awesome-icon id="my-map" icon="map-marked-alt" size="2x"/>
-                  </b-link>
+                  <i class="fa fa-map-signs text-white fa-lg" aria-hidden="true"></i>
                 </b-col>
                 <b-col cols="10" md="10" lg="10" class="d-flex flex-column align-self-center">
                   <b-link
@@ -82,7 +117,7 @@
                 </b-col>
               </b-row>
             </b-col>
-            <!-- twitter -->
+            <!-- facebook -->
             <b-col cols="12" class="my-lg-4 my-md-4 my-sm-3 my-2">
               <b-row>
                 <b-col
@@ -91,12 +126,10 @@
                   lg="2"
                   class="d-flex flex-column align-self-center text-center"
                 >
-                  <b-link href="#">
-                    <font-awesome-icon id="my-twitter" icon="twitter" size="2x"/>
-                  </b-link>
+                  <i class="fab fa-facebook text-white fa-lg"></i>
                 </b-col>
                 <b-col cols="10" md="10" lg="10" class="d-flex flex-column align-self-center">
-                  <b-link class="my-link">@Lorem</b-link>
+                  <b-link class="my-link">Klinik Argya</b-link>
                 </b-col>
               </b-row>
             </b-col>
@@ -109,35 +142,28 @@
                   lg="2"
                   class="d-flex flex-column align-self-center text-center"
                 >
-                  <b-link href="#">
-                    <!-- <font-awesome-icon id="my-instagram" icon="instagram" size="2x"/> -->
-                  </b-link>
+                  <i class="fab fa-instagram text-white fa-lg"></i>
                 </b-col>
                 <b-col cols="10" md="10" lg="10" class="d-flex flex-column align-self-center">
-                  <b-link class="my-link">@LoremIpsum</b-link>
+                  <b-link class="my-link">@klinikargya</b-link>
                 </b-col>
               </b-row>
             </b-col>
           </b-row>
         </b-col>
       </b-row>
-      <b-row>
-        <b-col cols="12" md="12" lg="12" class="mb-5 mt-5">
-          <h2 class="text-center text-appointment">Appointment</h2>
-          <div class="col-md-8 offset-md-2 mb-3 mt-3">
-            <VueCtkDateTimePicker v-model="timeCome" inline color="#62a93f" button-color="#62a93f"></VueCtkDateTimePicker>
-            <div class="text-center">
-              <b-button variant="outline-success" size="lg" @click="onBooking">Book Now!</b-button>
-            </div>
-          </div>
-        </b-col>
-      </b-row>
     </b-container>
+    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
+import MyFooter from "./Footer";
+
 export default {
+  components: {
+    "my-footer": MyFooter
+  },
   name: "LandingPage",
   data() {
     return {
@@ -223,10 +249,9 @@ export default {
 
 <style scoped>
 .jumbotron {
-  margin-top: 9vh;
+  /* margin-top: 9vh; */
   background-color: #62a93f;
   color: #fcf8fb;
-  border-radius: 0px;
 }
 
 #carousel-1 {
@@ -268,5 +293,11 @@ export default {
 }
 .text-appointment {
   color: #569d44;
+}
+.my-mt {
+  margin-top: 5rem;
+}
+.my-hr {
+  border-bottom: 1px dashed;
 }
 </style>

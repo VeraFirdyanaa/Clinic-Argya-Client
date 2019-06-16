@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    <footer>&copy; Boot Camp Majapahit Teknologi 2019</footer>
+    <footer>&copy; Klinik Argya 2019</footer>
   </div>
 </template>
 <script>

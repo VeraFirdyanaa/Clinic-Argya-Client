@@ -14,7 +14,6 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto mr-lg-5">
-          <b-nav-item href="#" id="linkInfo">Info</b-nav-item>
           <b-button @click="goToLogin" id="bottonLogIn" v-if="!isLoggedIn">Log In</b-button>
           <b-button @click="logout" id="bottonLogIn" v-if="isLoggedIn">Log Out</b-button>
         </b-navbar-nav>

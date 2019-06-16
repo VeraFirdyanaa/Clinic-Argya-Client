@@ -5,6 +5,20 @@
       <b-button v-b-modal.modal-form variant="outline-primary" class="mb-2">
         <i class="fa fa-plus"></i>&nbsp;Tambah Nurses
       </b-button>
+      <div class="row">
+        <div class="col-md-5 offset-md-7">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Find Nurse ..."
+              aria-describedby="button-addon2"
+              v-model="search"
+              autocomplete="false"
+            >
+          </div>
+        </div>
+      </div>
       <table class="table table-striped table-hovered">
         <thead>
           <tr>
@@ -40,6 +54,12 @@
           </tr>
         </tbody>
       </table>
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="totalRows"
+        @change="getNurses($event)"
+        :per-page="perPage"
+      ></b-pagination>
     </div>
     <b-modal id="modal-form" title="Form Nurse" @ok="ok()">
       <div class="row">
@@ -100,6 +120,7 @@
 
 <script>
 import Datepicker from "vuejs-datepicker";
+import _ from "lodash";
 
 export default {
   components: {
@@ -110,6 +131,10 @@ export default {
       editing: false,
       nurses: [],
       _id: null,
+      currentPage: 1,
+      perPage: 10,
+      totalRows: 0,
+      search: "",
       nurse: {
         name: null,
         address: null,
@@ -123,18 +148,28 @@ export default {
       }
     };
   },
+  watch: {
+    search: _.debounce(function(val) {
+      this.getNurses(1);
+    }, 500)
+  },
   mounted() {
-    this.getNurses();
+    this.getNurses(this.currentPage);
     this.$root.$on("bv::modal::hide", (bvEvent, modalId) => {
       this.onReset();
     });
   },
   methods: {
-    getNurses() {
-      fetch("http://localhost:5000/api/nurses")
+    getNurses(page) {
+      fetch(
+        `http://localhost:5000/api/nurses?page=${page}&limit=${
+          this.perPage
+        }&name=${this.search}`
+      )
         .then(res => res.json())
         .then(res => {
           this.nurses = res.nurses;
+          this.totalRows = res.total;
         })
         .catch(err => {
           console.log("an error occured", err.response);
