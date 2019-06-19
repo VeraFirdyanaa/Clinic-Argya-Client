@@ -29,6 +29,7 @@
             <th>Specialist</th>
             <th>Email</th>
             <th>rates</th>
+            <th>Picture</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -41,6 +42,15 @@
             <td>{{ doctor.specialist }}</td>
             <td>{{ doctor.userId.email }}</td>
             <td>{{ doctor.rates | currency }}</td>
+            <td>
+              <img
+                v-if="doctor.picture"
+                :src="doctor.picture"
+                alt="GAmbar"
+                width="100"
+                height="100"
+              >
+            </td>
             <td>
               <b-button-group>
                 <b-button size="sm" variant="info" @click="onEdit(doctor)">
@@ -125,6 +135,30 @@
             >
             <span class="text-danger">{{ errors.first('rates') }}</span>
           </div>
+          <div class="form-group">
+            <label for="picture">Picture</label>
+            <img
+              v-if="editing && picture"
+              :src="picture"
+              alt="Gambar lama"
+              width="300"
+              height="300"
+            >
+            <picture-input
+              ref="pictureInput"
+              width="300"
+              height="300"
+              margin="16"
+              accept="image/jpeg, image/png"
+              size="10"
+              button-class="btn btn-primary"
+              :custom-strings="{
+                      upload: '<h1>Bummer!</h1>',
+                      drag: 'Drag a 😺 Image'
+                    }"
+              @change="onChange"
+            ></picture-input>
+          </div>
           <div v-if="!editing">
             <div class="form-group">
               <label for="email">Email</label>
@@ -182,8 +216,13 @@
 
 <script>
 import _ from "lodash";
+import PictureInput from "vue-picture-input";
+import UploadImage from 'vue-upload-image';
 
 export default {
+  components: {
+    PictureInput
+  },
   data() {
     return {
       editing: false,
@@ -193,6 +232,7 @@ export default {
       perPage: 10,
       totalRows: 0,
       search: "",
+      picture: null,
       doctor: {
         name: null,
         address: null,
@@ -268,15 +308,32 @@ export default {
           console.log("an error occured", err.response);
         });
     },
+    onChange(image) {
+      if (this.$refs.pictureInput.file) {
+        this.picture = this.$refs.pictureInput.file;
+      } else {
+        console.log("Old browser. No support for Filereader API");
+      }
+    },
     ok() {
       this.doctor.password = this.password;
+      let fd = new FormData();
+      fd.append("name", this.doctor.name);
+      fd.append("address", this.doctor.address);
+      fd.append("noTelp", this.doctor.noTelp);
+      fd.append("rates", this.doctor.rates);
+      fd.append("gender", this.doctor.gender);
+      fd.append("specialist", this.doctor.specialist);
+      fd.append("email", this.doctor.email);
+      fd.append("password", this.doctor.password);
+      fd.append("picture", this.picture);
       if (this.editing) {
         fetch("http://localhost:5000/api/doctors/" + this._id, {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json"
+            // "Content-Type": "multipart/form-data"
           },
-          body: JSON.stringify(this.doctor)
+          body: fd
         })
           .then(res => res.json())
           .then(res => {
@@ -293,9 +350,9 @@ export default {
         fetch("http://localhost:5000/api/doctors", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            // "Content-Type": "multipart/form-data"
           },
-          body: JSON.stringify(this.doctor)
+          body: fd
         })
           .then(res => res.json())
           .then(res => {

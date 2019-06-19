@@ -118,6 +118,7 @@ export default {
     }, 500)
   },
   mounted() {
+    console.log(process.env.VUE_APP_SERVER_URL);
     this.getAppointments(this.currentPage);
   },
   methods: {
