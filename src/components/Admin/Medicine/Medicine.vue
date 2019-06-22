@@ -27,6 +27,7 @@
             <th>Expired</th>
             <th>Created</th>
             <th>Price</th>
+            <th>Stock</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -37,8 +38,17 @@
             <td>{{ medicine.expiredDate | moment("dddd, MMMM do YYYY") }}</td>
             <td>{{ medicine.createdDate | moment("dddd, MMMM do YYYY") }}</td>
             <td>{{ medicine.price | currency }}</td>
+            <td>{{ medicine.stock }}</td>
             <td>
               <b-button-group>
+                <b-button
+                  size="sm"
+                  variant="warning"
+                  v-b-modal.modal-stock
+                  @click="onAddStock(medicine)"
+                >
+                  <i class="fa fa-plus"></i>&nbsp; Stock
+                </b-button>
                 <b-button size="sm" variant="info" @click="onEdit(medicine)">
                   <i class="fa fa-pencil-alt"></i>&nbsp;Edit
                 </b-button>
@@ -78,6 +88,10 @@
             <input type="number" v-model="medicine.price" class="form-control">
           </div>
           <div class="form-group">
+            <label for="stock">Stock</label>
+            <input type="number" v-model="medicine.stock" class="form-control">
+          </div>
+          <div class="form-group">
             <label for="expiredDate">Expired Date</label>
             <datepicker
               name="expiredDate"
@@ -87,6 +101,16 @@
               autocomplete="off"
             ></datepicker>
             <span class="text-danger">{{ errors.first('expiredDate') }}</span>
+          </div>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal id="modal-stock" title="Add Stock" @ok="saveStock()">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="qty">Qty</label>
+            <input type="number" name="newQty" v-model="newQty" class="form-control">
           </div>
         </div>
       </div>
@@ -111,6 +135,7 @@ export default {
       perPage: 10,
       totalRows: 0,
       search: "",
+      newQty: 0,
       medicine: {
         name: null,
         price: 0,
@@ -128,7 +153,9 @@ export default {
   methods: {
     getMedicines(page) {
       fetch(
-        `http://localhost:5000/api/medicines?page=${page}&limit=${this.perPage}&name=${this.search}`
+        `http://localhost:5000/api/medicines?page=${page}&limit=${
+          this.perPage
+        }&name=${this.search}`
       )
         .then(res => res.json())
         .then(res => {
@@ -179,6 +206,27 @@ export default {
           })
           .catch(err => console.log("an error occured", err.response));
       }
+    },
+    onAddStock(medicine) {
+      this._id = medicine._id;
+    },
+    saveStock() {
+      fetch("http://localhost:5000/api/medicines/stock/" + this._id, {
+        method: "PUT",
+        body: JSON.stringify({
+          qty: this.newQty
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(res => {
+          alert(res.message ? res.message : "Berhasil Menambah Stock!");
+          this.onReset();
+          this.getMedicines();
+        })
+        .catch(err => console.log("an error occured", err.response));
     },
     onEdit(medicine) {
       fetch("http://localhost:5000/api/medicines/" + medicine._id)
