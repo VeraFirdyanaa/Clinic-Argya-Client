@@ -66,6 +66,10 @@
           >
           <label class="form-check-label" for="defaultCheck1">+ Consultation Fee</label>
         </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" v-model="needOpaname" id="defaultCheck3">
+          <label class="form-check-label" for="defaultCheck1">+ Perlu Rawat Inap</label>
+        </div>
         <b-button @click="save" variant="info" block class="mb-5">
           <i class="fa fa-send"></i>&nbsp;Simpan
         </b-button>
@@ -95,7 +99,8 @@ export default {
       recipe: null,
       needRecipe: false,
       recipeBox: [this.needRecipe],
-      consultationFee: false
+      consultationFee: false,
+      needOpname: false
     };
   },
   mounted() {
@@ -147,7 +152,8 @@ export default {
                 appointment: this.appointment._id
               },
               recipe: this.recipe,
-              consultationFee: this.consultationFee
+              consultationFee: this.consultationFee,
+              needOpname: this.needOpname
             }),
             headers: {
               "Content-Type": "application/json"

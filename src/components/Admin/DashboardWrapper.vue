@@ -29,6 +29,7 @@
             <router-link to="/dashboard/nurses" class="dropdown-item">Nurses</router-link>
             <router-link to="/dashboard/patients" class="dropdown-item">Patients</router-link>
             <router-link to="/dashboard/medicines" class="dropdown-item">Medicines</router-link>
+            <router-link to="/dashboard/rooms" class="dropdown-item">Rooms</router-link>
           </div>
         </li>
         <li class="nav-item">

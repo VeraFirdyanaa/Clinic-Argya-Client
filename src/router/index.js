@@ -18,70 +18,75 @@ import Medicine from '@/components/Admin/Medicine/Medicine'
 import Appointment from '@/components/Admin/Appointment/Appointment'
 import Procedure from '@/components/Admin/Appointment/Procedure/Procedure';
 import ViewMedicalRecord from '@/components/Admin/Appointment/Procedure/MedicalRecord/ViewMedicalRecord';
+import Room from "@/components/Admin/Room/Room";
 
 Vue.use(Router)
 Vue.use(BootstrapVue)
 
 const router = new Router({
   routes: [{
-      path: '/',
-      component: DashView,
-      children: [{
-        path: '',
-        name: 'LandingPage',
-        component: LandingPage
-      }]
-      // meta: {
-      //   auth: true
-      // }
-    },
-    {
-      path: '/dashboard/',
-      component: DashboardWrapper,
-      children: [{
-        path: '',
-        name: 'DashboardAdmin',
-        component: DashboardAdmin
-      }, {
-        path: 'doctors',
-        name: 'Doctors',
-        component: Doctor
-      }, {
-        path: 'patients',
-        name: 'Patients',
-        component: Patient
-      }, {
-        path: 'nurses',
-        name: 'Nurses',
-        component: Nurse
-      }, {
-        path: 'medicines',
-        name: 'Medicines',
-        component: Medicine
-      }, {
-        path: 'appointments',
-        name: 'Appointment',
-        component: Appointment
-      }, {
-        path: 'procedures/:id/:_mongoID',
-        name: 'Procedure',
-        component: Procedure
-      }, {
-        path: 'medical-records/:id',
-        name: 'MedicalRecordView',
-        component: ViewMedicalRecord
-      }]
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/register',
-      name: 'Register',
-      component: Register
-    }
+    path: '/',
+    component: DashView,
+    children: [{
+      path: '',
+      name: 'LandingPage',
+      component: LandingPage
+    }]
+    // meta: {
+    //   auth: true
+    // }
+  },
+  {
+    path: '/dashboard/',
+    component: DashboardWrapper,
+    children: [{
+      path: '',
+      name: 'DashboardAdmin',
+      component: DashboardAdmin
+    }, {
+      path: 'doctors',
+      name: 'Doctors',
+      component: Doctor
+    }, {
+      path: 'patients',
+      name: 'Patients',
+      component: Patient
+    }, {
+      path: 'nurses',
+      name: 'Nurses',
+      component: Nurse
+    }, {
+      path: 'medicines',
+      name: 'Medicines',
+      component: Medicine
+    }, {
+      path: 'appointments',
+      name: 'Appointment',
+      component: Appointment
+    }, {
+      path: 'procedures/:id/:_mongoID',
+      name: 'Procedure',
+      component: Procedure
+    }, {
+      path: 'medical-records/:id',
+      name: 'MedicalRecordView',
+      component: ViewMedicalRecord
+    }, {
+      path: 'rooms',
+      name: 'Rooms',
+      component: Room
+    }]
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
+  }
   ]
 });
 
