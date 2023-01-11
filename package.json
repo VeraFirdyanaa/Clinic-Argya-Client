@@ -20,7 +20,7 @@
     "bcrypt": "^3.0.6",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.19",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.11",
     "vee-validate": "^2.2.8",
     "vue": "^2.6.10",
